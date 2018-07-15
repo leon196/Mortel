@@ -1,0 +1,27 @@
+{
+	"animations": "animation/scene.json",
+	"fonts": {
+	},
+	"textures": {
+	},
+	"geometries": {
+	},
+	"shaders": {
+		"plant": {
+			"vertexShader": "shader/plant.vert",
+			"fragmentShader": "shader/plant.frag"
+		},
+		"raymarching": {
+			"vertexShader": "shader/postprocess.vert",
+			"fragmentShader": "shader/raymarching.frag"
+		},
+		"sdfMesh": {
+			"vertexShader": "shader/postprocess.vert",
+			"fragmentShader": "shader/sdfMesh.frag"
+		},
+		"postprocess": {
+			"vertexShader": "shader/postprocess.vert",
+			"fragmentShader": "shader/postprocess.frag"
+		}
+	}
+}
