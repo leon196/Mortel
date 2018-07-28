@@ -13,13 +13,10 @@ gui.go = function() {
 		if (keys.length > 0) {
 			keys.forEach(key => {
 				const param = parameters[keyRoot][key];
-				const item = folder.add(parameters[keyRoot], key).listen();
+				const item = folder.add(parameters[keyRoot], key);
 				const type = typeof(param);
 				if (type == 'number') {
 					item.step(0.01);
-				}
-				if (param == 0.) {
-					item.min(0).max(1);
 				}
 			});
 		} else {

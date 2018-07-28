@@ -7,21 +7,33 @@
 	"geometries": {
 	},
 	"shaders": {
-		"plant": {
-			"vertexShader": "shader/plant.vert",
-			"fragmentShader": "shader/plant.frag"
-		},
 		"raymarching": {
-			"vertexShader": "shader/postprocess.vert",
-			"fragmentShader": "shader/raymarching.frag"
+			"vertexShader": "shader/fullscreen.vert",
+			"fragmentShader": "shader/project/raymarching.frag"
 		},
-		"sdfMesh": {
-			"vertexShader": "shader/postprocess.vert",
-			"fragmentShader": "shader/sdfMesh.frag"
+		"particle": {
+			"vertexShader": "shader/project/particle.vert",
+			"fragmentShader": "shader/project/particle.frag",
+			"side": 2,
+			"depthTest": false,
+			"transparent": true
 		},
-		"postprocess": {
-			"vertexShader": "shader/postprocess.vert",
-			"fragmentShader": "shader/postprocess.frag"
+		"paper": {
+			"vertexShader": "shader/project/paper.vert",
+			"fragmentShader": "shader/project/paper.frag",
+			"side": 2
+		},
+		"line": {
+			"vertexShader": "shader/project/line.vert",
+			"fragmentShader": "shader/project/line.frag",
+			"side": 2,
+			"depthTest": false,
+			"transparent": true
+		},
+		"render": {
+			"vertexShader": "shader/fullscreen.vert",
+			"fragmentShader": "shader/render.frag"
 		}
 	}
 }
+

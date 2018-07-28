@@ -13,6 +13,7 @@ export default class Geometry {
 		var geometryCount = 1 + Math.floor(count / verticesMax);
 		var faces = [subdivisions[0]+1, subdivisions[1]+1];
 		var quadCount = subdivisions[0] * subdivisions[1];
+		var numberIndex = 0;
 		for (var m = 0; m < geometryCount; ++m) {
 
 			var vertexCount = count;
@@ -23,6 +24,7 @@ export default class Geometry {
 
 			var arrays = {};
 			var anchors = [];
+			var quantities = [];
 			var indexMap = [];
 			var indices = [];
 			var vIndex = 0;
@@ -45,6 +47,7 @@ export default class Geometry {
 						var anchorY = y / subdivisions[1];
 						anchors.push(anchorX*2.-1., anchorY*2.-1.);
 						indexMap.push(u,v);
+						quantities.push(numberIndex / count, numberIndex);
 					}
 				}
 				for (var y = 0; y < subdivisions[1]; ++y) {
@@ -56,6 +59,7 @@ export default class Geometry {
 					vIndex += 1;
 				}
 				vIndex += faces[0];
+				numberIndex++;
 			}
 
 			var geometry = new THREE.BufferGeometry();
@@ -64,14 +68,15 @@ export default class Geometry {
 				geometry.addAttribute(name, new THREE.BufferAttribute(array, attributes[name].itemSize));
 			});
 			geometry.addAttribute( 'anchor', new THREE.BufferAttribute( new Float32Array(anchors), 2 ) );
-			geometry.addAttribute( 'indexMap', new THREE.BufferAttribute( new Float32Array(indexMap), 2 ) );
+			geometry.addAttribute( 'quantity', new THREE.BufferAttribute( new Float32Array(quantities), 2 ) );
+			// geometry.addAttribute( 'indexMap', new THREE.BufferAttribute( new Float32Array(indexMap), 2 ) );
 			geometry.setIndex(new THREE.BufferAttribute(new Uint32Array(indices), 1));
 			geometries.push(geometry);
 		}
 		return geometries;
 	}
 
-	static randomPositionAttribute (count) {
+	static random (count) {
 	    return {
 	        position: {
 	            array: getRandomPoints(count),
