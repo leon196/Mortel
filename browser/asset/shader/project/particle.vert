@@ -1,20 +1,8 @@
 
 attribute vec2 anchor, quantity;
-uniform float time;
-uniform vec3 uRotation;
 varying vec4 vColor;
 varying vec2 vAnchor;
 varying float vDepth;
-
-vec3 displace (float ratio) {
-	vec3 p = vec3(2.+ratio, 0, 0);
-	float a = ratio * TAU;// - time * 10.;
-	p.xz *= rotation(a*uRotation.y);
-	p.yz *= rotation(a*uRotation.x);
-	p.yx *= rotation(a*uRotation.z);
-	p = mix(vec3(0), p, smoothstep(.0,.1,sin(ratio * PI)));
-	return p;
-}
 
 void main () {
 	float range = 3.;

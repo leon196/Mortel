@@ -86,21 +86,24 @@ function load(callback) {
 						vertexShader: shaderHeader + files[vertexShaderUrl],
 						fragmentShader: shaderHeader + files[fragmentShaderUrl],
 					}));
-					assets.shaders[name].cloned = [];
 				} else {
 					assets.shaders[name].vertexShader = shaderHeader + files[vertexShaderUrl];
 					assets.shaders[name].fragmentShader = shaderHeader + files[fragmentShaderUrl];
 					assets.shaders[name].needsUpdate = true;
-					assets.shaders[name].cloned.forEach(clone => {
-						clone.vertexShader = shaderHeader + files[vertexShaderUrl];
-						clone.fragmentShader = shaderHeader + files[fragmentShaderUrl];
-						clone.needsUpdate = true;
-					})
 				}
+				assets.shaders[name].url = [vertexShaderUrl, fragmentShaderUrl];
 			});
 		});
 
 		const urls = Object.keys(urlCallbacks);
+
+		register(['shader/header.glsl'], () => {
+			Object.keys(assets.shaders).forEach(key => {
+				assets.shaders[key].vertexShader = files['shader/header.glsl'] + files[assets.shaders[key].url[0]];
+				assets.shaders[key].fragmentShader = files['shader/header.glsl'] + files[assets.shaders[key].url[1]];
+				assets.shaders[key].needsUpdate = true;				
+			});
+		});
 
 		let socket;
 

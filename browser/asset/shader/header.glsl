@@ -1,4 +1,11 @@
 
+// project specific
+
+uniform float time;
+uniform vec3 uRotation;
+
+// generic
+
 #define PI 3.14159
 #define PI2 6.28318
 #define TAU 6.28318
@@ -124,4 +131,21 @@ void shmax (inout Shape a, Shape b) {
     a.mat = mix(a.mat, b.mat, ab);
     a.density = mix(a.density, b.density, ab);
     a.pos = mix(a.pos, b.pos, ab);
+}
+
+
+// project specific
+
+vec3 displace (float ratio) {
+    vec3 p = vec3(2.+ratio, 0, 0);
+    float a = ratio * TAU;// - time * 10.;
+    p.xz *= rotation(a*uRotation.y);
+    p.yz *= rotation(a*uRotation.x);
+    p.yx *= rotation(a*uRotation.z);
+    float range = 2. + sin(time*4.);
+    p.x = clamp(p.x, -range, range);
+    p.y = clamp(p.y, -range, range);
+    p.z = clamp(p.z, -range, range);
+    p = mix(vec3(0), p, smoothstep(.0,.1,sin(ratio * PI)));
+    return p;
 }

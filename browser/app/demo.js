@@ -46,11 +46,11 @@ export default function() {
 			sceneMesh: { value: frameMesh.getTexture() },
 		}
 
-		add(assets.shaders.render);
+		// add(assets.shaders.render);
 		// add(assets.shaders.raymarching, [ new THREE.PlaneGeometry(1,1) ], sceneSDF);
-		add(assets.shaders.particle, Geometry.create(Geometry.random(10), [1,1]), sceneFX);
-		add(assets.shaders.paper, Geometry.create(Geometry.random(1000), [1,4]), sceneMesh);
-		add(assets.shaders.line, Geometry.create(Geometry.random(1), [1,1000]), sceneFX);
+		add(assets.shaders.particle, Geometry.create(Geometry.random(10), [1,1]));
+		add(assets.shaders.paper, Geometry.create(Geometry.random(1000), [1,4]));
+		add(assets.shaders.line, Geometry.create(Geometry.random(1), [1,1000]));
 		
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);

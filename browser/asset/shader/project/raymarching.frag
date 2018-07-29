@@ -1,11 +1,11 @@
 
 precision mediump float;
 
-uniform float time;
 uniform vec2 resolution;
 uniform vec3 cameraPos, cameraTarget;
 
-const float steps = 50.;
+const float steps = 20.;
+const float count = 8.;
 const float far = 100.;
 
 float fbm (in vec3 seed) {
@@ -35,7 +35,6 @@ Shape sdf (vec3 pos) {
 	Shape spheres;
 	spheres.dist = 10.;
 	spheres.mat = 1.;
-	const float count = 16.;
 	float outer = 4.;
 	float inner = 2.;
 	float range = .5;
@@ -50,7 +49,7 @@ Shape sdf (vec3 pos) {
 	spheres.dist = max(-spheres.dist, sdbox(pos, vec3(outer)));
 	spheres.dist = max(spheres.dist, -sdbox(pos, vec3(inner)));
 	shmin(scene, spheres);
-
+	
 	return scene;
 }
 
@@ -88,7 +87,7 @@ float getShadow (vec3 pos, vec3 at, float k) {
 Shape raymarching (vec3 pos, vec3 ray, inout vec4 hit)
 {
 	Shape shape;
-	// float dither = randorm(gl_FragCoord.xy/resolution.xy);
+	// float dither = random(gl_FragCoord.xy/resolution.xy);
 	float total = 0.;
 	for (float i = steps; i >= 0.; --i) {
 
