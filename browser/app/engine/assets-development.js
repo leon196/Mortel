@@ -35,6 +35,8 @@ function load(callback) {
 
 	loader.load(baseUrl + 'shader/header.glsl', shaderHeader => {
 
+		files['shader/header.glsl'] = shaderHeader;
+
 		const plyLoader = new PLYLoader();
 		const objLoader = new OBJLoader();
 		const fbxLoader = new FBXLoader();
@@ -83,12 +85,12 @@ function load(callback) {
 			register([vertexShaderUrl, fragmentShaderUrl], () => {
 				if (assets.shaders[name] === undefined) {
 					assets.shaders[name] = new THREE.ShaderMaterial(Object.assign({}, descriptors.shaders[name], {
-						vertexShader: shaderHeader + files[vertexShaderUrl],
-						fragmentShader: shaderHeader + files[fragmentShaderUrl],
+						vertexShader: files['shader/header.glsl'] + files[vertexShaderUrl],
+						fragmentShader: files['shader/header.glsl'] + files[fragmentShaderUrl],
 					}));
 				} else {
-					assets.shaders[name].vertexShader = shaderHeader + files[vertexShaderUrl];
-					assets.shaders[name].fragmentShader = shaderHeader + files[fragmentShaderUrl];
+					assets.shaders[name].vertexShader = files['shader/header.glsl'] + files[vertexShaderUrl];
+					assets.shaders[name].fragmentShader = files['shader/header.glsl'] + files[fragmentShaderUrl];
 					assets.shaders[name].needsUpdate = true;
 				}
 				assets.shaders[name].url = [vertexShaderUrl, fragmentShaderUrl];

@@ -11,21 +11,30 @@
 			"vertexShader": "shader/fullscreen.vert",
 			"fragmentShader": "shader/project/raymarching.frag"
 		},
-		"particle": {
-			"vertexShader": "shader/project/particle.vert",
-			"fragmentShader": "shader/project/particle.frag",
+		"links": {
+			"vertexShader": "shader/project/links.vert",
+			"fragmentShader": "shader/project/links.frag",
 			"side": 2,
 			"depthTest": false,
 			"transparent": true
 		},
-		"paper": {
-			"vertexShader": "shader/project/paper.vert",
-			"fragmentShader": "shader/project/paper.frag",
+		"flux": {
+			"vertexShader": "shader/project/flux.vert",
+			"fragmentShader": "shader/project/flux.frag",
 			"side": 2
 		},
-		"line": {
-			"vertexShader": "shader/project/line.vert",
-			"fragmentShader": "shader/project/line.frag",
+		"surface": {
+			"vertexShader": "shader/project/surface.vert",
+			"fragmentShader": "shader/project/surface.frag",
+			"side": 2
+		},
+		"tubes": {
+			"vertexShader": "shader/project/tubes.vert",
+			"fragmentShader": "shader/project/tubes.frag"
+		},
+		"lines": {
+			"vertexShader": "shader/project/lines.vert",
+			"fragmentShader": "shader/project/lines.frag",
 			"side": 2,
 			"depthTest": false,
 			"transparent": true

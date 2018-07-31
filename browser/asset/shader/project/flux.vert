@@ -7,14 +7,13 @@ varying float vDepth;
 
 void main () {
 	float range = 3.;
-	float size = .01;
+	float size = .02;
 	
 	vec4 pos = modelMatrix * vec4(position, 1);
 	float y = anchor.y*.5+.5;
-	float t = quantity.x + anchor.y * .0005 + time * .02;
+	float t = quantity.x + anchor.y * .0005;
 	float index = floor(t);
 	float ratio = mod(t, 1.);
-	float fadeout = smoothstep(1., .8, ratio);
 
 	pos.xyz = displace(ratio);
 	vec3 next = displace(ratio+.01);
@@ -24,8 +23,8 @@ void main () {
 	vec3 right = cross(normalize(next-pos.xyz), up);
 	// right = normalize((rotationMatrix(up, sin(anchor.x*3.+time)) * vec4(right, 1.)).xyz);
 	float dist = length(anchor);
-	float wave = sin(quantity.x*10000.);
-	pos.xyz += up * wave * .2;
+	float wave = sin(quantity.x*1000.);
+	pos.xyz += up * wave * .1;
 	pos.xyz += right * anchor.x * size;
 
 	vColor = vec4(1.);

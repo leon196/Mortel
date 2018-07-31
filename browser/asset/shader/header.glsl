@@ -79,9 +79,57 @@ float pModPolar(inout vec2 p, float repetitions) {
 
 float colorDistance (vec4 a, vec4 b) { return (abs(a.r-b.r)+abs(a.g-b.g)+abs(a.b-b.b))/3.0; }
 float luminance ( vec3 color ) { return (color.r + color.g + color.b) / 3.0; }
+float luminance ( vec4 color ) { return (color.r + color.g + color.b + color.a) / 4.0; }
 float range (float fromA, float toA, float fromB, float toB, float value) { return smoothstep(fromA, toA, value) * (1. - smoothstep(fromB, toB, value)); }
 float reflectance(vec3 a, vec3 b) { return dot(normalize(a), normalize(b)) * 0.5 + 0.5; }
 vec2 kaelidoGrid(vec2 p) { return vec2(step(mod(p, 2.0), vec2(1.0))); }
+
+vec4 edgeSD (sampler2D bitmap, vec2 uv, vec2 dimension)
+{
+    vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+
+    color += abs(texture2D(bitmap, uv + vec2(1, 0) / dimension) - texture2D(bitmap, uv + vec2(-1, 0) / dimension));
+    color += abs(texture2D(bitmap, uv + vec2(0, 1) / dimension) - texture2D(bitmap, uv + vec2(0, -1) / dimension));
+
+    return color / 2.;
+}
+
+vec4 edge (sampler2D bitmap, vec2 uv, vec2 dimension)
+{
+    vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+
+    color += -1.0 * texture2D(bitmap, uv + vec2(-2, -2) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2(-2, -1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2(-2,  0) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2(-2,  1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2(-2,  2) / dimension);
+
+    color += -1.0 * texture2D(bitmap, uv + vec2(-1, -2) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2(-1, -1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2(-1,  0) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2(-1,  1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2(-1,  2) / dimension);
+
+    color += -1.0 * texture2D(bitmap, uv + vec2( 0, -2) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 0, -1) / dimension);
+    color += 24.0 * texture2D(bitmap, uv + vec2( 0,  0) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 0,  1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 0,  2) / dimension);
+
+    color += -1.0 * texture2D(bitmap, uv + vec2( 1, -2) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 1, -1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 1,  0) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 1,  1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 1,  2) / dimension);
+
+    color += -1.0 * texture2D(bitmap, uv + vec2( 2, -2) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 2, -1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 2,  0) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 2,  1) / dimension);
+    color += -1.0 * texture2D(bitmap, uv + vec2( 2,  2) / dimension);
+
+    return color;
+}
 
 // https://stackoverflow.com/questions/15095909/from-rgb-to-hsv-in-opengl-glsl
 vec3 rgb2hsv(vec3 c) {
@@ -137,15 +185,13 @@ void shmax (inout Shape a, Shape b) {
 // project specific
 
 vec3 displace (float ratio) {
-    vec3 p = vec3(2.+ratio, 0, 0);
-    float a = ratio * TAU;// - time * 10.;
-    p.xz *= rotation(a*uRotation.y);
-    p.yz *= rotation(a*uRotation.x);
-    p.yx *= rotation(a*uRotation.z);
-    float range = 2. + sin(time*4.);
-    p.x = clamp(p.x, -range, range);
-    p.y = clamp(p.y, -range, range);
-    p.z = clamp(p.z, -range, range);
-    p = mix(vec3(0), p, smoothstep(.0,.1,sin(ratio * PI)));
+    vec3 p = vec3(ratio*2., 0, 0);
+    float a = (ratio - time) * TAU;
+    p.xz *= rotation(sin(a*uRotation.y)*TAU*2.);
+    p.yz *= rotation(sin(a*uRotation.x)*TAU*2.);
+    p.yx *= rotation(sin(a*uRotation.z)*TAU*2.);
+    // vec3 range = vec3(1.5);
+    // p.y = max(p.y, 0.);
+    // p = mix(vec3(0), p, smoothstep(.0,.1,sin(ratio * PI)));
     return p;
 }
