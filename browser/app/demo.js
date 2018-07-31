@@ -13,20 +13,22 @@ import FrameBuffer from './engine/framebuffer';
 import { gui } from './engine/gui';
 
 export default function() {
-	var scene, sceneSDF, sceneFX, sceneMesh, camera, controls, uniforms;
-	var frameSDF, frameFX, frameMesh;
+	var scene, scenePost, sceneSDF, sceneFX, sceneMesh, camera, controls, uniforms;
+	var frameSDF, frameFX, frameMesh, frameRender;
 	var keys, deltas;
 
 	assets.load(function() {
 		scene = new THREE.Scene();
+		scenePost = new THREE.Scene();
 		sceneSDF = new THREE.Scene();
 		sceneFX = new THREE.Scene();
 		sceneMesh = new THREE.Scene();
 		frameSDF = new FrameBuffer();
 		frameFX = new FrameBuffer();
 		frameMesh = new FrameBuffer();
+		frameRender = new FrameBuffer();
 		
-		camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 2000);
+		camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 2000);
 		camera.position.x = 0;
 		camera.position.y = 2.5;
 		camera.position.z = 5;
@@ -45,6 +47,7 @@ export default function() {
 			sceneFX: { value: frameFX.getTexture() },
 			sceneSDF: { value: frameSDF.getTexture() },
 			sceneMesh: { value: frameMesh.getTexture() },
+			scene: { value: frameRender.getTexture() },
 		}
 		keys = Object.keys(assets.animations.actions);
 		deltas = {};
@@ -53,13 +56,16 @@ export default function() {
 			deltas[name] = [0,0,0];
 		});
 
-		add(assets.shaders.render);
 		// add(assets.shaders.raymarching, [ new THREE.PlaneGeometry(1,1) ], sceneSDF);
 		add(assets.shaders.surface, Geometry.create(Geometry.random(2000)), sceneMesh);
-		add(assets.shaders.tubes, Geometry.create(Geometry.random(40), [8,100]), sceneMesh);
+		add(assets.shaders.tubes, Geometry.create(Geometry.random(5), [5,100]), sceneMesh);
+		add(assets.shaders.cables, Geometry.create(Geometry.random(40), [5,100]), sceneMesh);
+		add(assets.shaders.doors, Geometry.create(Geometry.random(5), [5,5]), sceneMesh);
 		// add(assets.shaders.links, Geometry.create(Geometry.random(100)), sceneFX);
 		// add(assets.shaders.flux, Geometry.create(Geometry.random(1000), [1,4]), sceneFX);
 		// add(assets.shaders.lines, Geometry.create(Geometry.random(1), [1,1000]), sceneFX);
+		add(assets.shaders.render, [ new THREE.PlaneGeometry(1,1) ], scene);
+		add(assets.shaders.postrender, [ new THREE.PlaneGeometry(1,1) ], scenePost);
 		
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
@@ -101,7 +107,8 @@ export default function() {
 		frameFX.record(sceneFX, camera);
 		frameSDF.record(sceneSDF, camera);
 		frameMesh.record(sceneMesh, camera);
-		renderer.render(scene, camera);
+		frameRender.record(scene, camera);
+		renderer.render(scenePost, camera);
 	}
 
 	function onWindowResize() {
@@ -113,6 +120,7 @@ export default function() {
 		frameFX.setSize(w,h);
 		frameSDF.setSize(w,h);
 		frameMesh.setSize(w,h);
+		frameRender.setSize(w,h);
 		camera.aspect = w/h;
 		camera.updateProjectionMatrix();
 	}

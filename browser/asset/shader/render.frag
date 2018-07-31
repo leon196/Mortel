@@ -10,6 +10,8 @@ float lines (float value) {
 
 void main () {
 
+	vec2 uv = vUv;
+
 	vec4 fx = texture2D(sceneFX, vUv);
 	vec4 sdf = texture2D(sceneSDF, vUv);
 	vec4 mesh = texture2D(sceneMesh, vUv);
@@ -24,6 +26,9 @@ void main () {
 	float salt = random(vUv);
 	vec3 view = lookAt(cameraPos, cameraTarget, screen);
 	vec3 normal = color.rgb*2.-1.;
+	vec3 position = cameraPos + view * depthMesh;
+	float water = step(position.y, -2.8);
+	
 	float far = step(.001, length(color.rgb));
 	// far *= smoothstep(20., 10., depthMesh);
 	float shade = (dot(normalize(normal), -view)*.5+.5);
@@ -32,6 +37,7 @@ void main () {
 	hashes *= mix(1., lines(screen.x+screen.y), smoothstep(.7, .3, shade));
 	hashes *= mix(1., lines(screen.x-screen.y), smoothstep(.5, .3, shade));
 	hashes = mix(hashes, 0., smoothstep(.2, .0, shade));
+
 
 	// shade *= shade;
 	color.rgb = vec3(hashes * step(.01, shade));
@@ -46,5 +52,7 @@ void main () {
 	vec2 p = abs(vUv*2.-1.);
 	color.rgb *= .25+.75*(1.-pow(p.x, 8.));
 	color.rgb *= .25+.75*(1.-pow(p.y, 8.));
+	color.a = depthMesh;
+	// color.rgb += abs(fract(position));
 	gl_FragColor = color;
 }

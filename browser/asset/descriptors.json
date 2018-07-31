@@ -25,12 +25,20 @@
 		},
 		"surface": {
 			"vertexShader": "shader/project/surface.vert",
-			"fragmentShader": "shader/project/surface.frag",
+			"fragmentShader": "shader/project/normal.frag",
 			"side": 2
 		},
 		"tubes": {
 			"vertexShader": "shader/project/tubes.vert",
-			"fragmentShader": "shader/project/tubes.frag"
+			"fragmentShader": "shader/project/normal.frag"
+		},
+		"cables": {
+			"vertexShader": "shader/project/cables.vert",
+			"fragmentShader": "shader/project/normal.frag"
+		},
+		"doors": {
+			"vertexShader": "shader/project/doors.vert",
+			"fragmentShader": "shader/project/normal.frag"
 		},
 		"lines": {
 			"vertexShader": "shader/project/lines.vert",
@@ -42,6 +50,10 @@
 		"render": {
 			"vertexShader": "shader/fullscreen.vert",
 			"fragmentShader": "shader/render.frag"
+		},
+		"postrender": {
+			"vertexShader": "shader/fullscreen.vert",
+			"fragmentShader": "shader/postrender.frag"
 		}
 	}
 }

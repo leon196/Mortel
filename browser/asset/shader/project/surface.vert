@@ -20,7 +20,8 @@ void main () {
 
 	// depth
 	pos.z = floor(quantity.y/w)/h;
-	pos.z = mod(pos.z + time * .1, 1.);
+	pos.z = pos.z;// + time * .1;
+	pos.z = mod(pos.z, 1.);
 	float fade = smoothstep(.0, .1, pos.z) * smoothstep(1., .9, pos.z);
 	pos.z = (pos.z - .5)*r.y;
 
@@ -46,6 +47,7 @@ void main () {
 	vNormal = normalize(vec3(0,0,pos.z) - pos.xyz);
 	vNormal = mix(vNormal, turn(vNormal, angle), blend);
 
+	// size *= smoothstep(.0, 5., length(pos.xyz - cameraPosition));
 	pos.xyz += pivot * size * fade;
 	vView = pos.xyz - cameraPosition;
 
