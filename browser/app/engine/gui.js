@@ -15,9 +15,9 @@ gui.go = function() {
 				const param = parameters[keyRoot][key];
 				const item = folder.add(parameters[keyRoot], key);
 				const type = typeof(param);
-				if (type == 'number') {
-					item.step(0.01);
-				}
+				// if (type == 'number') {
+				// 	item.step(0.01);
+				// }
 			});
 		} else {
 		}

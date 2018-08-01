@@ -15,7 +15,7 @@ import { gui } from './engine/gui';
 export default function() {
 	var scene, scenePost, sceneSDF, sceneFX, sceneMesh, camera, controls, uniforms;
 	var frameSDF, frameFX, frameMesh, frameRender;
-	var keys, deltas;
+	var keys, deltas, params;
 
 	assets.load(function() {
 		scene = new THREE.Scene();
@@ -43,29 +43,32 @@ export default function() {
 			resolution: { value: [window.innerWidth, window.innerHeight] },
 			cameraPos: { value: camera.position },
 			cameraTarget: { value: controls.target },
-			uRotation: { value: [0,0,0] },
 			sceneFX: { value: frameFX.getTexture() },
 			sceneSDF: { value: frameSDF.getTexture() },
 			sceneMesh: { value: frameMesh.getTexture() },
 			scene: { value: frameRender.getTexture() },
+			tunnelTileCount: { value: 2000 },
+			tunnelDoors: { value: 5 },
 		}
+		params = Object.keys(parameters.debug);
 		keys = Object.keys(assets.animations.actions);
 		deltas = {};
 		keys.forEach(name => {
 			uniforms[name] = {value:[0,0,0]};
 			deltas[name] = [0,0,0];
 		});
+		params.forEach(name =>  uniforms[name] = {value:parameters.debug[name]});
 
 		// add(assets.shaders.raymarching, [ new THREE.PlaneGeometry(1,1) ], sceneSDF);
-		add(assets.shaders.surface, Geometry.create(Geometry.random(2000)), sceneMesh);
-		add(assets.shaders.tubes, Geometry.create(Geometry.random(5), [5,100]), sceneMesh);
-		add(assets.shaders.cables, Geometry.create(Geometry.random(40), [5,100]), sceneMesh);
-		add(assets.shaders.doors, Geometry.create(Geometry.random(5), [5,5]), sceneMesh);
+		add(assets.shaders.surface, Geometry.create(Geometry.random(uniforms.tunnelTileCount.value)), sceneMesh);
+		add(assets.shaders.tubes, Geometry.create(Geometry.random(5), [3,100]), sceneMesh);
+		add(assets.shaders.cables, Geometry.create(Geometry.random(40), [3,100]), sceneMesh);
+		add(assets.shaders.doors, Geometry.create(Geometry.random(uniforms.tunnelDoors.value), [5,5]), sceneMesh);
 		// add(assets.shaders.links, Geometry.create(Geometry.random(100)), sceneFX);
 		// add(assets.shaders.flux, Geometry.create(Geometry.random(1000), [1,4]), sceneFX);
 		// add(assets.shaders.lines, Geometry.create(Geometry.random(1), [1,1000]), sceneFX);
 		add(assets.shaders.render, [ new THREE.PlaneGeometry(1,1) ], scene);
-		add(assets.shaders.postrender, [ new THREE.PlaneGeometry(1,1) ], scenePost);
+		// add(assets.shaders.postrender, [ new THREE.PlaneGeometry(1,1) ], scenePost);
 		
 		onWindowResize();
 		window.addEventListener('resize', onWindowResize, false);
@@ -95,20 +98,19 @@ export default function() {
 		uniforms.time.value = elapsed;
 		uniforms.cameraPos.value = camera.position;
 		uniforms.cameraTarget.value = controls.target;
-		uniforms.uRotation.value[0] = parameters.debug.rotationX;
-		uniforms.uRotation.value[1] = parameters.debug.rotationY;
-		uniforms.uRotation.value[2] = parameters.debug.rotationZ;
 		keys.forEach(name => {
 			var pos = assets.animations.getPosition(name, elapsed);
 			deltas[name] = lerpArray(deltas[name], pos, .1);
 			uniforms[name].value = pos;
 		});
+		params.forEach(name =>  uniforms[name].value = parameters.debug[name]);
 		
-		frameFX.record(sceneFX, camera);
-		frameSDF.record(sceneSDF, camera);
+		// frameFX.record(sceneFX, camera);
+		// frameSDF.record(sceneSDF, camera);
 		frameMesh.record(sceneMesh, camera);
-		frameRender.record(scene, camera);
-		renderer.render(scenePost, camera);
+		// frameRender.record(scene, camera);
+		// renderer.render(scenePost, camera);
+		renderer.render(scene, camera);
 	}
 
 	function onWindowResize() {

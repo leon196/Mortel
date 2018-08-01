@@ -47,7 +47,7 @@ export default class Geometry {
 						var anchorY = y / subdivisions[1];
 						anchors.push(anchorX*2.-1., anchorY*2.-1.);
 						indexMap.push(u,v);
-						quantities.push(numberIndex / count, numberIndex);
+						quantities.push(numberIndex / (count-1), numberIndex);
 					}
 				}
 				for (var y = 0; y < subdivisions[1]; ++y) {

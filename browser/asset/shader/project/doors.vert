@@ -1,17 +1,18 @@
 
+uniform float tunnelWalk, tunnelRange, tunnelRadius, tunnelDoors, tunnelDoorWidth, tunnelDoorHeight, tunnelDoorArc, tunnelDoorGround;
 attribute vec2 anchor, quantity;
 varying vec3 vNormal, vView;
 
 void main () {
-	float range = 2.89;
 	vec4 pos = vec4(position, 1);
 
-	pos.xy = vec2(-range, 0.);
-	pos.z = (quantity.x*2.-1.) * 20.;
+	pos.xy = vec2(-tunnelRadius+.01, 0.);
+	float x = mod(quantity.y/tunnelDoors + tunnelWalk, 1.);
+	pos.z = (x*2.-1.) * tunnelRange;	
 
-	pos.xy *= rotation(.3+anchor.y*.4-.1*sin((anchor.x*.5+.5)*PI)*step(anchor.y,.5));
-	pos.z += anchor.x * .6;
-	// pos.yz += vec2(anchor.x, anchor.y);
+	pos.xy *= rotation(tunnelDoorGround+anchor.y*tunnelDoorHeight-tunnelDoorArc*sin((anchor.x*.5+.5)*PI)*step(anchor.y,.5));
+	pos.z += anchor.x * tunnelDoorWidth;
+
 	vNormal = vec3(0);
 	vView = pos.xyz - cameraPosition;
 

@@ -25,8 +25,7 @@
 		},
 		"surface": {
 			"vertexShader": "shader/project/surface.vert",
-			"fragmentShader": "shader/project/normal.frag",
-			"side": 2
+			"fragmentShader": "shader/project/normal.frag"
 		},
 		"tubes": {
 			"vertexShader": "shader/project/tubes.vert",

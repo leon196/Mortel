@@ -32,6 +32,8 @@ void main () {
 	float far = step(.001, length(color.rgb));
 	// far *= smoothstep(20., 10., depthMesh);
 	float shade = (dot(normalize(normal), -view)*.5+.5);
+	// vec3 lightPos = vec3(0);
+	// float shade = (dot(normalize(normal), normalize(position-lightPos))*.5+.5);
 	// shade *= abs(dot(normalize(normal), normalize(vec3(0,1,0))));
 	float hashes = 1.;
 	hashes *= mix(1., lines(screen.x+screen.y), smoothstep(.7, .3, shade));
