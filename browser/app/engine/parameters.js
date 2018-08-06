@@ -11,7 +11,7 @@ export default {
 		tunnelCableFrequency: 5.,
 		tunnelCableMess: .3,
 		tunneTubeRadius: .2,
-		tunnelDoorGround: .3,
+		tunnelDoorGround: .19,
 		tunnelDoorArc: .07,
 		tunnelDoorHeight: .45,
 		tunnelDoorWidth: .65,

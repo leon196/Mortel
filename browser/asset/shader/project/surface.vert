@@ -7,7 +7,7 @@ varying vec3 vNormal, vView;
 vec3 turn (vec3 v, float a) {
 	v.xz *= rotation(a * .1);
 	v.zy *= rotation(a * .1);
-	v.xy *= rotation(a * .2);
+	v.xy *= rotation(a * .1);
 	return v;
 }
 
@@ -18,7 +18,7 @@ void main () {
 
 	float depth = floor(quantity.y/width)/height;
 	depth = mod(depth+tunnelWalk, 1.);
-	float fade = smoothstep(.0, .1, depth) * smoothstep(1., .9, depth);
+	float fade = smoothstep(.0, .2, depth) * smoothstep(1., .8, depth);
 	// float blend = smoothstep(.0, .1, 1./abs(blend));
 	float angle = mod(quantity.y,width)/width * TAU;
 	angle += floor(quantity.y/width)*PI/width;

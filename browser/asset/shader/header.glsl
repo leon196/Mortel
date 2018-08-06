@@ -2,7 +2,6 @@
 // project specific
 
 uniform float time;
-uniform vec3 uRotation;
 
 // generic
 
@@ -184,12 +183,14 @@ void shmax (inout Shape a, Shape b) {
 
 // project specific
 
+uniform float rotationX, rotationY, rotationZ;
+
 vec3 displace (float ratio) {
-    vec3 p = vec3(ratio*2., 0, 0);
+    vec3 p = vec3(ratio*4., 0, 0);
     float a = (ratio - time) * TAU;
-    p.xz *= rotation(sin(a*uRotation.y)*TAU*2.);
-    p.yz *= rotation(sin(a*uRotation.x)*TAU*2.);
-    p.yx *= rotation(sin(a*uRotation.z)*TAU*2.);
+    p.xz *= rotation(sin(a*rotationX)*TAU*2.);
+    p.yz *= rotation(sin(a*rotationY)*TAU*2.);
+    p.yx *= rotation(sin(a*rotationY)*TAU*2.);
     // vec3 range = vec3(1.5);
     // p.y = max(p.y, 0.);
     // p = mix(vec3(0), p, smoothstep(.0,.1,sin(ratio * PI)));

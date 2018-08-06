@@ -49,6 +49,7 @@ export default function() {
 			scene: { value: frameRender.getTexture() },
 			tunnelTileCount: { value: 2000 },
 			tunnelDoors: { value: 5 },
+			tunnelPlankCount: { value: 80 },
 		}
 		params = Object.keys(parameters.debug);
 		keys = Object.keys(assets.animations.actions);
@@ -64,6 +65,8 @@ export default function() {
 		add(assets.shaders.tubes, Geometry.create(Geometry.random(5), [3,100]), sceneMesh);
 		add(assets.shaders.cables, Geometry.create(Geometry.random(40), [3,100]), sceneMesh);
 		add(assets.shaders.doors, Geometry.create(Geometry.random(uniforms.tunnelDoors.value), [5,5]), sceneMesh);
+		add(assets.shaders.planks, Geometry.clone(new THREE.BoxBufferGeometry(), uniforms.tunnelPlankCount.value), sceneMesh);
+		// console.log(new THREE.BoxBufferGeometry( 1, 1, 1 ))
 		// add(assets.shaders.links, Geometry.create(Geometry.random(100)), sceneFX);
 		// add(assets.shaders.flux, Geometry.create(Geometry.random(1000), [1,4]), sceneFX);
 		// add(assets.shaders.lines, Geometry.create(Geometry.random(1), [1,1000]), sceneFX);
@@ -105,7 +108,7 @@ export default function() {
 		});
 		params.forEach(name =>  uniforms[name].value = parameters.debug[name]);
 		
-		// frameFX.record(sceneFX, camera);
+		frameFX.record(sceneFX, camera);
 		// frameSDF.record(sceneSDF, camera);
 		frameMesh.record(sceneMesh, camera);
 		// frameRender.record(scene, camera);

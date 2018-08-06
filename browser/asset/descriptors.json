@@ -31,6 +31,10 @@
 			"vertexShader": "shader/project/tubes.vert",
 			"fragmentShader": "shader/project/normal.frag"
 		},
+		"planks": {
+			"vertexShader": "shader/project/planks.vert",
+			"fragmentShader": "shader/project/normal.frag"
+		},
 		"cables": {
 			"vertexShader": "shader/project/cables.vert",
 			"fragmentShader": "shader/project/normal.frag"

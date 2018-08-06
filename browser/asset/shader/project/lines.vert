@@ -5,7 +5,7 @@ varying vec4 vColor;
 varying vec2 vAnchor;
 
 void main () {
-	float size = .5 * showFXlines.z;
+	float size = .5;
 	vColor = vec4(1);
 	vAnchor = anchor;
 	vec4 pos = modelMatrix * vec4(position, 1);

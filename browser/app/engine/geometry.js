@@ -76,6 +76,45 @@ export default class Geometry {
 		return geometries;
 	}
 
+	static clone (geometryToClone, instances) {
+		var geometries = [];
+		var numberIndex = 0;
+		console.log(geometryToClone)
+		var arrays = {};
+		var quantities = [];
+		var indices = [];
+		var attributes = geometryToClone.attributes;
+		var vertexCount = attributes.position.array.length/3;
+		var triCount = geometryToClone.index.array.length;
+		var attributeNames = Object.keys(attributes);
+		attributeNames.forEach(name => { arrays[name] = []; });
+		for (var index = 0; index < instances; ++index) {
+			attributeNames.forEach(name => {
+				var array = attributes[name].array;
+				for (var i = 0; i < array.length; i++) {
+					arrays[name].push(array[i]);
+				}
+			});
+			for (var v = 0; v < triCount; ++v) {
+				indices.push(numberIndex*vertexCount+geometryToClone.index.array[v]);
+			}
+			for (var v = 0; v < vertexCount; ++v) {
+				quantities.push(numberIndex / (instances-1), numberIndex);
+			}
+			numberIndex++;
+		}
+
+		var geometry = new THREE.BufferGeometry();
+		attributeNames.forEach(name => {
+			geometry.addAttribute(name, new THREE.BufferAttribute(new Float32Array(arrays[name]), attributes[name].itemSize));
+		});
+		geometry.addAttribute( 'quantity', new THREE.BufferAttribute( new Float32Array(quantities), 2 ) );
+		geometry.setIndex(new THREE.BufferAttribute(new Uint32Array(indices), 1));
+		geometries.push(geometry);
+
+		return geometries;
+	}
+
 	static random (count) {
 	    return {
 	        position: {
